@@ -10,7 +10,7 @@ function ListGenerator(props){
         }
         return <li key={index} onClick={() => props.click(index)}>{item}</li>
     });
-    return <ul>{list}</ul>;
+    return <ul className="main">{list}</ul>;
 }
 
 function Nestedlist(props){
@@ -31,14 +31,19 @@ function Nestedlist(props){
 
 function DataChanger(props){
     return(
-        <form>
-            <h2>Recipe</h2>
-            <input type='text' name='recipeVal' value={props.recipeVal} onChange={props.handleForm}/>
-            <h2>Ingredients</h2>
-            <input type='text' name='ingredientsVal' value={props.ingredientsVal} onChange={props.handleForm}/>
-            <button type="button" onClick={props.handleAddRecipe}>{props.button1}</button>
-            <button type="button" onClick={props.handleCloseClick}>Close</button>
+        <div className="modal">
+            <form>
+                <h2>Recipe</h2>
+                <input type='text' name='recipeVal' value={props.recipeVal} onChange={props.handleForm}/>
+                <h2>Ingredients</h2>
+                <input type='text' name='ingredientsVal' value={props.ingredientsVal} onChange={props.handleForm}/>
+                <div>
+                    <button type="button" onClick={props.handleAddRecipe}>{props.button1}</button>
+                    <button type="button" onClick={props.handleCloseClick}>Close</button>
+                </div>
         </form>
+
+        </div>
     );
 }
 
