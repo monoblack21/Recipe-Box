@@ -66,7 +66,7 @@ class RecipeBox extends React.Component{
         this.handleUpdateClick = this.handleUpdateClick.bind(this);
         this.handleAddClick = this.handleAddClick.bind(this);
         this.handleCloseClick = this.handleCloseClick.bind(this);
-        this.updateLocalStorage = this.updateLocalStorage.bind(this);
+        this.handleRewind = this.handleRewind.bind(this);
     }
 
     componentDidMount(){
@@ -175,6 +175,20 @@ class RecipeBox extends React.Component{
         })
     }
 
+    handleRewind(){
+        let recipe = this.state.recipe.slice();
+        let ingredients = this.state.ingredients.slice();
+
+        recipe.splice(recipe.length - 1, 1);
+        ingredients.splice(ingredients.length - 1, 1);
+
+        console.log(recipe, ingredients);
+        this.setState({
+            recipe: recipe,
+            ingredients: ingredients,
+        });
+    }
+
     updateLocalStorage(){
         let recipe = this.state.recipe.slice();
         let ingredients = this.state.ingredients.slice();
@@ -197,6 +211,7 @@ class RecipeBox extends React.Component{
             <div>
                 <ListGenerator list={arr[position]} nested={ingredients[position]} nestNum={nestNum} click={this.handleListClick} handleDelete={this.deleteList} handleUpdateClick={this.handleUpdateClick}/>
                 <button onClick={this.handleAddClick}>Add Recipe</button>
+                <button onClick={this.handleRewind}> Rewind (Warning no redo) </button>
                 {this.state.whichForm == "add" ? (
                      <DataChanger button1={"Add Recipe"} recipeVal={this.state.recipeVal} handleForm={this.handleForm} ingredientsVal={this.state.ingredientsVal} handleAddRecipe={this.handleAddRecipe} handleCloseClick={this.handleCloseClick}/>
                 ) : (null)}
