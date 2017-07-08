@@ -52,7 +52,7 @@ class RecipeBox extends React.Component{
         super(props);
         this.state = {
             recipe : [["salmon", "fish", "rice"]],
-            ingredients:[[["fish", "gtore"],["nilk", "gore"],["goat"]]],
+            ingredients: [[["fish", "gtore"],["nilk", "gore"],["goat"]]],
             nestNum: -1,
             recipeVal: "",
             ingredientsVal: "",
@@ -66,6 +66,17 @@ class RecipeBox extends React.Component{
         this.handleUpdateClick = this.handleUpdateClick.bind(this);
         this.handleAddClick = this.handleAddClick.bind(this);
         this.handleCloseClick = this.handleCloseClick.bind(this);
+        this.updateLocalStorage = this.updateLocalStorage.bind(this);
+    }
+
+    componentDidMount(){
+        let recipe = localStorage.recipe !== undefined ? [JSON.parse(localStorage.recipe)] : [["salmon", "fish", "rice"]];
+        let ingredients = localStorage.ingredients !== undefined ? [JSON.parse(localStorage.ingredients)] : [[["fish", "gtore"],["nilk", "gore"],["goat"]]];
+
+        this.setState({
+            recipe: recipe,
+            ingredients: ingredients,
+        });
 
     }
 
@@ -85,11 +96,14 @@ class RecipeBox extends React.Component{
         let ingCurrent = ingAll[ingAll.length - 1].slice(0);
         recipeCurrent.splice(i, 1);
         ingCurrent.splice(i, 1);
-        this.setState({
-            recipe: recipeAll.concat([recipeCurrent]),
-            ingredients: ingAll.concat([ingCurrent]),
-            nestNum: -1,
-        });
+        this.setState(
+            {
+                recipe: recipeAll.concat([recipeCurrent]),
+                ingredients: ingAll.concat([ingCurrent]),
+                nestNum: -1,
+            },
+            this.updateLocalStorage
+        );
     }
 
     handleForm(event){
@@ -117,12 +131,15 @@ class RecipeBox extends React.Component{
         recipeCurrent.push(recipeVal);
         ingCurrent.push(ingredientsVal);
 
-        this.setState({
-            recipe: recipeAll.concat([recipeCurrent]),
-            ingredients: ingAll.concat([ingCurrent]),
-            recipeVal: "",
-            ingredientsVal: "",
-        });
+        this.setState(
+            {
+                recipe: recipeAll.concat([recipeCurrent]),
+                ingredients: ingAll.concat([ingCurrent]),
+                recipeVal: "",
+                ingredientsVal: "",
+            },
+            this.updateLocalStorage
+        );
     }
 
     handleUpdateClick(i){
@@ -142,17 +159,32 @@ class RecipeBox extends React.Component{
 
         ingCurrent.splice(i, 1, ingredientsVal);
         recipeCurrent.splice(i, 1, recipeVal);
-        this.setState({
-            ingredients: this.state.ingredients.concat([ingCurrent]),
-            ingredientsVal: "",
-            recipe: this.state.recipe.concat([recipeCurrent]),
-        });
+        this.setState(
+            {
+                ingredients: this.state.ingredients.concat([ingCurrent]),
+                ingredientsVal: "",
+                recipe: this.state.recipe.concat([recipeCurrent]),
+            },
+            this.updateLocalStorage
+        );
     }
 
     handleCloseClick(){
         this.setState({
             whichForm: null,
         })
+    }
+
+    updateLocalStorage(){
+        let recipe = this.state.recipe.slice();
+        let ingredients = this.state.ingredients.slice();
+
+        if(localStorage){
+            localStorage.recipe = JSON.stringify(recipe[recipe.length - 1]);
+            localStorage.ingredients = JSON.stringify(ingredients[ingredients.length -1]);
+        }else{
+            consol.log("No localStorage on device");
+        }
     }
 
     render(){
